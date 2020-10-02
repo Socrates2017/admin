@@ -1,233 +1,239 @@
-
-
-/**
- *输入框失去焦点时触发登录验证码检查方法
- */
-$("#login-authCode").blur(function () {
-    checkloginauthCode();
-});
+var isCreator = false;
 
 /**
- * 检查登录验证码是否正确
- * @returns
+ * 访问url并写到frame中
+ * @param url
  */
-function checkloginauthCode() {
-    var authCode = $("#login-authCode").val();
-    if (authCode != undefined && authCode != "") {
-        var dataObj = {};
-        dataObj.authCode = authCode;
-        $.ajax({
-            url: "/api/v1/authCode/check",
-            type: "POST",
-            cache: false,
-            contentType: "application/json;charset=utf-8",
-            datatype: "json",
-            data: JSON.stringify(dataObj),
-            success: function (result) {
-                if (result.code == 1) {
-                    $("#div-authCode-login").addClass("has-success has-feedback");
-                    $("#login-authCode").after("<span class='glyphicon glyphicon-ok form-control-feedback' aria-hidden='true'></span>");
-                    /*
-                     * 如果第一次重复了 换了一个账号之后成功了
-                     * 要把第一次加的class和span取消掉
-                     */
-                    $("#div-authCode-login").removeClass("has-error");
-                    $("#div-authCode-login span").remove(".glyphicon-remove");
-                } else if (result.code == 10005) {
-                    $("#div-authCode-login").addClass("has-error has-feedback");
-                    $("#login-authCode").after("<span class='glyphicon glyphicon-remove form-control-feedback' aria-hidden='true'></span>");
-                    $("#div-authCode-login").removeClass("has-success");
-                    $("#div-authCode-login span").remove(".glyphicon-ok");
-                }else{
-                    console.log(result)
-                }
-            }
-        });
-    } else {
-        $("#div-authCode-login").addClass("has-error has-feedback");
-        $("#login-authCode").after("<span class='glyphicon glyphicon-remove form-control-feedback' aria-hidden='true'></span>");
-        $("#div-authCode-login").removeClass("has-success");
-        $("#div-authCode-login span").remove(".glyphicon-ok");
-    }
-}
-
-
-
-/**
- * 提交登录表单
- * @returns
- */
-function login() {
-    var authCode_class = $("#div-authCode-login").attr("class");
-    if (authCode_class.indexOf("glyphicon-remove") > 0) {
-        //alert("验证码不正确");
-        return false;
-    }
-    var name = $("#login-name").val();
-    var pwd = $("#login-password").val();
-    var authCode = $("#login-authCode").val();
-
-    var reqBody = {};
-    reqBody.name = name;
-    reqBody.pwd = pwd;
-    reqBody.authCode = authCode;
-
-    showReflesh();
-    $.ajax({
-        url: "/api/v1/admin/user/login",
-        type: "post",
-        contentType: "application/json;charset=utf-8",
-        datatype: "json",
-        data: JSON.stringify(reqBody),
-        success: function (result) {
-            removeReflesh();
-            let code = result.code;
-            if (code == 1) {
-                authCodeImg("checkLogin");
-                $('#login').modal('hide');
-
-                var pathName = location.pathname;
-                if(pathName != '/admin'){
-                    location.href =location.href;
-                }
-
-            } else if (code == 10001 ||code == 10002) {
-                 console.log("token缺失");
-                 authCodeImg();
-                 $.MsgBox.Confirm("提示", "请重新登录", function () {
-                     console.log("登录失败")
-                 });
-            } else {
-                $.MsgBox.Confirm("提示", result.msg, function () {
-                    console.log("登录失败")
-                });
-            }
-        },
-         error: function (result) {
-             removeReflesh();
-             $.MsgBox.Confirm("提示", result.msg, function () {});
-         }
-    });
+function getContent(url) {
+    $('#content').attr('src', url);
+    changeFrameHeight();
+    var html = '<a href="' + url + '" target="_blank" >' + url + '</a>&emsp;<a href="' + url +
+        '" target="_blank" ><span class="glyphicon glyphicon-share"></span></a>'
+    $('#new-window-content').html(html);
 }
 
 /**
- * 监听 enter事件，按下enter触发登录事件
-
- document.onkeydown = function(e) {
-	var ev = document.all ? window.event : e;
-	if (ev.keyCode == 13) {
-		login();
-	}
-}*/
-
-/**
- * 退出登录
- * @returns
+ * iframe高度自适应
+ * 左边目录栏高度自适应
  */
-function logout() {
-    var dataObj = {};
-    $.ajax({
-        url: "/api/v1/admin/user/logout",
-        type: "post",
-        contentType: "application/json;charset=utf-8",
-        datatype: "json",
-        data: JSON.stringify(dataObj),
-        success: function (result) {
-            let code = result.code;
-            if (code == 1) {
-                location.reload(true);
-            }  else if (code == 10001 ||code == 10002) {
-                location.reload(true);
-            }else {
-                $.MsgBox.Confirm("提示", result.msg, function () {});
-            }
-        },
-      error: function (result) {
-          removeReflesh();
-          $.MsgBox.Confirm("提示", result.msg, function () {});
-      }
-    });
+function changeFrameHeight() {
+    var ifm = document.getElementById("content");
+    ifm.height = document.documentElement.clientHeight - 30;
+    $("#left-scroll").height(document.documentElement.clientHeight - 30);
 }
 
 /**
- * 刷新验证码
- * @param callback
+ * 窗口高度改变时触发
  */
-function authCodeImg(callback) {
-    var url = '/api/v1/authCode/img';
+window.onresize = function () {
+    changeFrameHeight();
+}
 
-    showReflesh();
 
-    $.get(url, function (result) {
-        $("#img-authCode-login").attr("src", url);
-        $("#img-authCode-register").attr("src", url);
+/**
+ * 隐藏章节目录
+ * @param id
+ */
+function hideIndex(id) {
+    $("#index_" + id).html("");
+    var showHtml = '<a href="javascript:void(0);" onclick="getIndex(' + id + ')"><span class="glyphicon glyphicon-chevron-right"></span></a>'
+    $("#show-" + id).html(showHtml);
+}
 
-        if ($.isBlank(callback)) {
-        removeReflesh();
-        } else {
-            window[callback].call(this);
+
+/**
+ * 缩小右边栏
+ */
+function indentRight() {
+    var classes = document.getElementById("left").classList;
+    var leftNum = 3;
+
+    for (var j = 0, len = classes.length; j < len; j++) {
+        var className = classes[j];
+        if (className.substr(0, 7) == "col-sm-") {
+            leftNum = parseInt(className.substr(7))
+            break;
         }
+    }
 
-    });
+    var numRight = 12 - leftNum;
+    var leftClassOld = 'col-sm-' + leftNum + ' col-md-' + leftNum + ' col-lg-' + leftNum;
+    var rightClassOld = 'col-sm-' + numRight + ' col-md-' + numRight + ' col-lg-' + numRight;
+
+    var newNum = leftNum + 1;
+    var newNumRight = 12 - newNum;
+    var leftClassNew = 'col-sm-' + newNum + ' col-md-' + newNum + ' col-lg-' + newNum;
+    var rightClassNew = 'col-sm-' + newNumRight + ' col-md-' + newNumRight + ' col-lg-' + newNumRight;
+
+    $("#left").removeClass(leftClassOld);
+    $("#left").addClass(leftClassNew)
+    $("#right").removeClass(rightClassOld);
+    $("#right").addClass(rightClassNew)
+
 }
 
 /**
- * 检测用户是否已经登录
- * @returns
+ * 缩小左边栏
  */
-function checkLogin() {
+function indentLeft() {
+    var classes = document.getElementById("left").classList;
+    var leftNum = 3;
+    for (var j = 0, len = classes.length; j < len; j++) {
+        var className = classes[j];
+        if (className.substr(0, 7) == "col-sm-") {
+            leftNum = parseInt(className.substr(7))
+            break;
+        }
+    }
+
+    var numRight = 12 - leftNum;
+    var leftClassOld = 'col-sm-' + leftNum + ' col-md-' + leftNum + ' col-lg-' + leftNum;
+    var rightClassOld = 'col-sm-' + numRight + ' col-md-' + numRight + ' col-lg-' + numRight;
+
+    var newNum = leftNum - 1;
+    var newNumRight = 12 - newNum;
+    var leftClassNew = 'col-sm-' + newNum + ' col-md-' + newNum + ' col-lg-' + newNum;
+    var rightClassNew = 'col-sm-' + newNumRight + ' col-md-' + newNumRight + ' col-lg-' + newNumRight;
+
+    $("#left").removeClass(leftClassOld);
+    $("#left").addClass(leftClassNew)
+    $("#right").removeClass(rightClassOld);
+    $("#right").addClass(rightClassNew)
+
+}
+
+/**
+ * 隐藏左边栏
+ */
+function hideLeft() {
+    var classes = document.getElementById("left").classList;
+    var leftNum = 3;
+    for (var j = 0, len = classes.length; j < len; j++) {
+        var className = classes[j];
+        if (className.substr(0, 7) == "col-sm-") {
+            leftNum = parseInt(className.substr(7))
+            break;
+        }
+    }
+    var numRight = 12 - leftNum;
+    var rightClassOld = 'col-sm-' + numRight + ' col-md-' + numRight + ' col-lg-' + numRight;
+
+    $("#left").hide()
+    $("#right").removeClass(rightClassOld);
+    $("#right").addClass('col-sm-12 col-md-12 col-lg-12')
+
+    $("#indentRight").hide()
+}
+
+
+/**
+ * 显示左边栏
+ */
+function showLeft() {
+    var classes = document.getElementById("left").classList;
+    var leftNumOld = 3;
+    for (var j = 0, len = classes.length; j < len; j++) {
+        var className = classes[j];
+        if (className.substr(0, 7) == "col-sm-") {
+            leftNumOld = parseInt(className.substr(7))
+            break;
+        }
+    }
+
+    var newNumRight = 12 - leftNumOld;
+    var rightClassNew = 'col-sm-' + newNumRight + ' col-md-' + newNumRight + ' col-lg-' + newNumRight;
+
+    $("#left").show()
+    $("#right").removeClass('col-sm-12 col-md-12 col-lg-12');
+    $("#right").addClass(rightClassNew)
+
+    $("#indentRight").show()
+
+}
+
+/**
+ * 控制隐藏或显示左边栏
+ */
+function hideOrShowLeft() {
+    var ishide = $("#indentRight").is(':hidden');
+    if (ishide) {
+        showLeft()
+    } else {
+        hideLeft()
+    }
+}
+
+/**
+ * 获取章节目录并局部刷新
+ *
+ * @param id
+ */
+function getIndex(id) {
+
+    var bookId = $("#bookId").val();
+    if ($.isBlank(bookId)) {
+        $.MsgBox.Confirm("提示", "错误：bookId 为空！", function () {
+        });
+        return;
+    }
 
     $.ajax({
-        url: "/api/v1/admin/user/login/check",
+        url: "/bookIndex/children?book=" + bookId + "&parent=" + id,
         type: "GET",
         datatype: "json",
         async: true,
         success: function (result) {
             var code = result.code;
 
-             if (code == 1) {
-                //获取cookie中的用户id
-                var user = result.data;
-                var ulHtml = '';
-                ulHtml += '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <img id="sm-name" src="';
-                if ($.isBlank(user.headImg)) {
-                    ulHtml += '/img/default_headImg.jpg"';
-                } else {
-                    ulHtml += user.headImg;
+            if (code == 10000) {
+                var data = result.data;
+                var html = '<ul class="" id="ul-' + id + '" >';
+                for (var i in data) {
+                    var bookIndex = data[i];
+                    var isLeaf = bookIndex.isLeaf;
+
+                    html += '<li id="li-' + bookIndex.id + '" class=""  style="margin-top:20px;" draggable="true" ondragstart="drag(event)" ';
+
+                    if (isLeaf == 0) {
+                        html += 'ondrop="drop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondragover="allowDrop(event)">';
+                        html += '<div style="display: inline" id="show-' + bookIndex.id + '"><a href="javascript:void(0);" onclick="getIndex(' + bookIndex.id + ')"><span class="glyphicon glyphicon-chevron-right"></span></a></div>';
+                    } else {
+                        html += '>';
+                    }
+
+                    html += '&emsp;<a href="javascript:void(0);" onclick="getContent(\'' + bookIndex.url + '\')"><span id="name-' + bookIndex.id + '">' + bookIndex.name + '</span></a>';
+                    if (isCreator) {
+                        html += '&emsp;&emsp;<div style="display: inline" id="opear-' + bookIndex.id + '"><a href="javascript:void(0);" onclick="showUpdateIndexModal(' + id + "," + bookIndex.id + ",\'" + bookIndex.name + "\',\'" + bookIndex.url + '\',' + bookIndex.indexOrder + ',' + isLeaf
+                            + ')"><span class="glyphicon glyphicon-pencil"></span></a>';
+
+                        if (isLeaf == 0) {
+                            html += '<a href="javascript:void(0);" onclick="showAddIndexModal(' + bookIndex.id + ')"><span class="glyphicon glyphicon-plus-sign"></span></a>';
+                        }
+
+                        html += '<a href="javascript:void(0);" onclick="showDeleteIndexModal(' + id + "," + bookIndex.id + ')"><span class="glyphicon glyphicon-minus-sign"></span></a></div></li> ';
+                    }
+                    html += '<div id="index_' + bookIndex.id + '" style="padding-left:20px;" ></div>';
                 }
-                ulHtml += 'class="center-block img-circle" style="height: 29px;" alt="图片无效"></a><ul class="dropdown-menu"><li><a href="';
-                ulHtml += '/user/center/' + user.id + '" target="_blank">';
-                ulHtml += user.name + '<span class="glyphicon glyphicon-cog"></span></a> <a onclick="logout()"> 退出登录 <span class="glyphicon glyphicon-off"></span></a></li></ul></li>';
-                /**ulHtml += '<li> <a class="btn btn-default" href="/download/zrzhen2.0.0.apk" download="zrzhen_Android_2.0.0.apk" id="contact_weixin">下载APP</a></li>';*/
+                html += '</ul>'
+                $("#index_" + id).html(html);
 
-                $('#loginNav').html(ulHtml);
+                var showHtml = '<a href="javascript:void(0);" onclick="hideIndex(' + id + ')"><span class="glyphicon glyphicon-chevron-down"></span></a>';
+                $("#show-" + id).html(showHtml);
 
-                var menu ='<button type="button" class="btn-default" onclick="window.open(\'/admin/article/center\')"><span class="glyphicon glyphicon-book"></span>&ensp;文章管理中心</button>';
-
-                $('#articleCenter').html(menu);
-
-            } else if (code == 10001 ||code == 10002) {
-               console.log("登录失效");
-               authCodeImg();
-               $('#login').modal('show');
             } else {
-                $.MsgBox.Confirm("提示", result.msg, function () {});
-
+                console.log(result.message)
             }
-            removeReflesh();
-        },
-          error: function (result) {
-              removeReflesh();
-              $.MsgBox.Confirm("提示", result.msg, function () {});
-          }
+        }
     });
 }
 
-/**
- * 文档加载完毕即执行
- */
+
+
+
+
 $(function () {
-    authCodeImg("checkLogin");
+    $("#left-scroll").height(document.documentElement.clientHeight - 30);
+    var uri = window.location.pathname;
 
+    getContent("admin/article/center");
 });
-
