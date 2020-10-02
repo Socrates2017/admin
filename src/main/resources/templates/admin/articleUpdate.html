@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="SCRM, 个人微信, 小程序, 尼诺科技, 客户管理, 营销获客, 产品推广, 门店数字化管理">
+    <meta name="description" content="一款基于社交的客户管理系统">
+    <meta name="Robots" content="all">
+    <title>修改文章</title>
+    <link href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/public.css?v=2019092701" rel="stylesheet">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+    <style>
+        .button2 {
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 10%;
+            background-color: whitesmoke;
+            color: black;
+            border: 2px solid #008CBA;
+        }
+        .button2:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<input type="hidden" id="id" name="id" th:value="${article.id}"/>
+<input type="hidden" id="categoryOld" name="categoryOld" th:value="${article.category}"/>
+<input type="hidden" id="statusOld" name="statusOld" th:value="${article.status}"/>
+<input type="hidden" id="isTopOld" name="isTopOld" th:value="${article.isTop}"/>
+
+<div style="width:100%;background-color:#444444;margin-bottom:10px;">
+    <a href="/" style="color:#ffffff;font-size:80%;"> ←返回首页</a>
+</div>
+<h1 align="center">修改文章</h1>
+
+
+<div style="text-align:center;">
+    <div class="form-group">
+        <label for="title" >标题</label>
+        <label class="radio-inline">
+        <input type="text" class="form-control" id="title" th:value="${article.title}">
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="author">作者</label>
+        <label class="radio-inline">
+        <input type="text" class="form-control" id="author" th:value="${article.author}">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="summary">摘要</label>
+        <label class="radio-inline">
+        <textarea name="summary" id="summary" placeholder="摘要" style="width: 100%;" th:text="${article.summary}"></textarea>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="sort">排序</label>
+        <label class="radio-inline">
+            <input type="number" class="form-control" id="sort" th:value="${article.sort}">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="category">类别</label>
+        <label class="radio-inline">
+        <select id="category" style="width: 100%;">
+        </select>
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="article_isTop" >是否置顶</label>
+        <label class="radio-inline">
+            <input type="radio" name="article_isTop" id="article_isTop" value="0" >否
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="article_isTop" id="article_isTop2" value="1">是
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="article_status" >是否发布</label>
+        <label class="radio-inline">
+            <input type="radio" name="article_status" id="article_status" value="0" >否
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="article_status" id="article_status2" value="1">是
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="uploadFile" RestResult>封面</label>
+        <label class="radio-inline">
+            <input style="float:left" id="uploadFile" name="uploadFile" type="file" multiple="multiple">
+            <button style="float:left" onclick="upload2()">上传</button>
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="coverAlt" RestResult>封面提示</label>
+        <label class="radio-inline">
+            <input type="text" class="form-control" id="coverAlt" th:value="${article.coverAlt}">
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="coverAlt" RestResult>封面跳转链接</label>
+        <label class="radio-inline">
+            <input type="text" class="form-control" id="coverDirect" th:value="${article.coverDirect}">
+        </label>
+    </div>
+
+    <img id="coverImg" th:src="${article.cover}" style="height: 100px; ">
+</div>
+
+
+<div style="margin-left:0px;margin-right:0px;">
+
+    <script id="uEditor" type="text/plain" style="width:100%;height:500px;"></script>
+
+    <div style="float:right;">
+        <button type="submit" class="button2" onclick="addArticle()">提&nbsp;&nbsp;&nbsp;&nbsp;交
+        </button>
+    </div>
+</div>
+
+<textarea name="content" id="content" style="display:none"></textarea>
+
+<script th:inline="javascript">
+    var content = [[${article.content}]];
+    var uEditor = UE.getEditor('uEditor');
+    uEditor.ready(function () {
+        uEditor.setContent(content);
+    });
+</script>
+
+<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jenel.js?v=2019111902"></script>
+<script>
+
+    function addArticle() {
+        var id = $("#id").val();
+        var title = $("#title").val();
+        var author = $("#author").val();
+        var sort = $("#sort").val();
+
+        var summary = $("#summary").val();
+        var content = UE.getEditor('uEditor').getContent();
+        var status = $("input[name=article_status]:checked").val();
+        var isTop = $("input[name=article_isTop]:checked").val();
+        var category = $("#category").val();
+        var cover = $('#coverImg').attr('src');
+        var coverAlt = $("#coverAlt").val();
+        var coverDirect = $("#coverDirect").val();
+
+
+        if (title == "") {
+            $.MsgBox.Confirm("提示", "标题不能为空！", function () {
+            });
+            return false;
+        }
+        if (content == "") {
+            $.MsgBox.Confirm("提示", "内容不能为空！", function () {
+            });
+            return false;
+        }
+
+        var reqBody = {};
+        reqBody.id = id;
+        reqBody.category = category;
+        reqBody.title = title;
+        reqBody.author = author;
+        reqBody.summary = summary;
+        reqBody.content = content;
+        reqBody.status = status;
+        reqBody.isTop = isTop;
+        reqBody.cover = cover;
+        reqBody.sort = sort;
+        reqBody.coverAlt = coverAlt;
+        reqBody.coverDirect = coverDirect;
+        showReflesh();
+        $.ajax({
+            url: "/api/v1/admin/article/update",
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(reqBody),
+            success: function (result) {
+                removeReflesh();
+                let code = result.code;
+                if(code==1){
+                    $.MsgBox.Confirm("提示", "更新文章成功，点击确定去查看", function () {
+                       window.location.href = '/article/' + result.data;
+                    });
+                }else if (code == 10001 ||code == 10002) {
+                    location.reload(true);
+                }else{
+                        $.MsgBox.Confirm("提示", result.msg, function () {});
+                    }
+            },
+            error: function (result) {
+                removeReflesh();
+                $.MsgBox.Confirm("提示", result.msg, function () {});
+            }
+        });
+    }
+
+
+    function getArticleCategoryList() {
+        try {
+            $.ajax({
+                url: "/api/v1/admin/article/getAllArticleCategory",
+                type: "GET",
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==1){
+                        let data = result.data;
+                        var categorySelect =document.getElementById("category");
+
+                        let categoryOld=$("#categoryOld").val();
+                        for (var k in data) {
+                          var map = data[k]
+                          var id = map.id;
+                          var option = new Option(map.name,id);
+                           categorySelect.options.add(option);
+                           if (id == categoryOld){
+                              option.selected = true;
+                            }
+                        }
+
+                    }else{
+                        $.MsgBox.Confirm("提示", result.msg, function () {});
+                    }
+                },
+                error: function (result) {
+                    $.MsgBox.Confirm("提示", result.msg, function () {});
+                }
+            });
+        } catch (err) {
+        } finally {
+        }
+    }
+
+    function successCallback(data) {
+      var result = JSON.parse(data);
+      let code = result.code;
+
+       if (code == 1) {
+            var data = result.data;
+
+            $("#coverImg").attr("src",data);
+
+        } else if (code == 10001 ||code == 10002) {
+                    location.reload(true);
+        } else {
+            $.MsgBox.Confirm("提示", result.msg, function () {});
+        }
+    }
+
+    function upload2() {
+		var file = $('#uploadFile').get(0).files[0];
+		var URL= "/api/v1/file/upload";
+		upload(file, URL, successCallback);
+	}
+
+
+    $(function () {
+
+       getArticleCategoryList();
+
+       var status = $("#statusOld").val();
+        if (status == 0) {
+            $("input[name='article_status'][value=0]").prop("checked", true);
+        } else {
+            $("input[name='article_status'][value=1]").prop("checked", true);
+        }
+
+       var isTop = $("#isTopOld").val();
+        if (isTop == 0) {
+            $("input[name='article_isTop'][value=0]").prop("checked", true);
+        } else {
+            $("input[name='article_isTop'][value=1]").prop("checked", true);
+        }
+
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

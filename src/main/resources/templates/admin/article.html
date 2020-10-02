@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="SCRM, 个人微信, 小程序, 尼诺科技, 客户管理, 营销获客, 产品推广, 门店数字化管理">
+    <meta name="description" content="一款基于社交的客户管理系统">
+    <meta name="Robots" content="all">
+    <title th:text="${article.title} "></title>
+    <link href="/css/public.css?v=2019092701" rel="stylesheet">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jenel.js?v=2019111902"></script>
+
+    <style>
+        p {
+            text-indent: 2em;
+        }
+
+        p img {
+            text-indent: 0;
+            display:block;
+        }
+    </style>
+</head>
+<body>
+
+
+<input type="hidden" id="id" th:value="${article.id} " name="id"/>
+<input type="hidden" id="creator" th:value="${article.creator} " name="id"/>
+
+
+
+<div style="width:100%;background-color:#444444;margin-bottom:10px;">
+    <a href="/" style="color:#ffffff;font-size:80%;"> ←返回首页</a>
+</div>
+<h1 style="text-align:center;" th:text="${article.title}"/>
+<h3 style="text-align:center;" th:text="${article.author}"/>
+<h3 style="text-align:center;" th:text="${#dates.format(article.createTime,'yyyy-MM-dd hh:mm:ss')}"/>
+
+<p th:utext="${article.content} "/>
+
+
+<script>
+
+    $(function () {
+
+    });
+</script>
+</body>
+</html>

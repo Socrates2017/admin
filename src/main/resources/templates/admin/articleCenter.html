@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="SCRM, 个人微信, 小程序, 尼诺科技, 客户管理, 营销获客, 产品推广, 门店数字化管理">
+    <meta name="description" content="一款基于社交的客户管理系统">
+    <meta name="Robots" content="all">
+    <title>文章管理中心</title>
+    <link href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/css/public.css?v=2019092701" rel="stylesheet">
+    <link href="/css/index.css?v=2019092701" rel="stylesheet">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/laydate/laydate.js"></script>
+
+
+
+</head>
+<body>
+<div style="width:100%;background-color:#444444;margin-bottom:10px;">
+    <a href="/" style="color:#ffffff;font-size:80%;"> ←返回首页</a>
+</div>
+<div>
+    <h1 align="center"><span id="article_category_name"></span></h1>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <h1 align="center">文章管理中心</h1><br>
+            </div>
+            <div class="line"></div>
+
+            <div style="float:left">
+                <label for="category">类别</label>
+                <select id="category" >
+                    <option value=-1 selected>全部</option>
+                </select>
+            </div>
+            <div style="float:left;margin-left:10px">
+                <label for="article_isTop">置顶</label>
+                <select id="article_isTop" >
+                    <option value=-1 selected>全部</option>
+                    <option value=0>否</option>
+                    <option value=1>是</option>
+                </select>
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <label for="article_status">发布</label>
+                <select id="article_status" >
+                    <option value=-1 selected>全部</option>
+                    <option value=0>否</option>
+                    <option value=1>是</option>
+                </select>
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <label for="author">作者</label> <input type="text" size="16" id="author" placeholder="作者">
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <label for="createTime">创建时间</label> <input type="text" size="32" id="createTime" placeholder="点击选择日期范围">
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <label for="updateTime">更新时间</label> <input type="text" size="32" id="updateTime" placeholder="点击选择日期范围">
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <button type="button" class="btn-default" onclick="toSearch(null)"><span class="glyphicon glyphicon-search"></span>&ensp;搜索</button>
+            </div>
+
+            <div style="float:left;margin-left:10px">
+                <button type="button" class="btn-default" onclick="window.open('/admin/article/add')"><span class="glyphicon glyphicon-plus-sign"></span>&ensp;新增文章</button>
+            </div>
+
+
+            <div style="margin-top:60px;">
+                <table  class="table table-hover"  id="tableList"></table>
+                <div id="foot" style="text-align: center;margin-top: 50px"></div>
+                <div id="foot2" class="font_div" style="margin-top: 100px"></div>
+            </div>
+
+            <div style="margin-top:10px;border-radius:15px;background:#e0e0f4;">
+            </div>
+        </div>
+
+    </div>
+</div>
+<br><br>
+
+<br>
+
+<div style="color: #007878; clear: both; text-align: center; margin-top: 50px;margin-bottom:50px;">
+    <a href="http://www.gzninuo.com">聚氪云</a> | 粤ICP备 19100905号-2 广州尼诺科技有限公司版权所有<br>
+    Copyright ©2016 Powered By gzninuo Version 2.1.0<br>
+    转载本站原创文章，需经授权，联系方式：020-87599710
+</div>
+
+<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jenel.js?v=2019111902"></script>
+<script type="text/javascript" src="/js/articleCenter.js?v=2019112201"></script>
+
+</body>
+</html>
