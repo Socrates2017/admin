@@ -5,7 +5,7 @@ import java.util.Objects;
 public enum UserEnum {
 
 
-    ARTICLE_ADMIN(1L, new User(1L, "articleAdmin", "nino123456", 1)),
+    ARTICLE_ADMIN(1L, new User(1L, "admin", "123456", 1)),
 
     ;
 
