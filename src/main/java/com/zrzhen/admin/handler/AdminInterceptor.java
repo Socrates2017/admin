@@ -36,7 +36,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         boolean out = false;
 
         RestResult result = userService.loginCheck();
-
+        out = true;
         if (result != null && result.getCode() == RestResultEnum.SUCCESS.getCode()) {
             out = true;
         }

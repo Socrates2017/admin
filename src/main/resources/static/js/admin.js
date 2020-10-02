@@ -19,7 +19,7 @@ function getContent(url) {
 function changeFrameHeight() {
     var ifm = document.getElementById("content");
     ifm.height = document.documentElement.clientHeight - 30;
-    $("#left-scroll").height(document.documentElement.clientHeight - 30);
+    $("#left-scroll").height(ifm.height);
 }
 
 /**
