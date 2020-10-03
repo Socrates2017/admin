@@ -1,13 +1,13 @@
-package com.nino.officialsite.module.${module}.service.impl;
+package com.zrzhen.admin.module.${module}.service.impl;
 
 import com.nino.chargeserver.result.ResponseResult;
 import com.nino.chargeserver.util.idmaker.IdUtil;
-import com.nino.officialsite.module.${module}.dao.${classname}BaseMapper;
-import com.nino.officialsite.module.${module}.param.${classname}BaseAddParam;
-import com.nino.officialsite.module.${module}.param.${classname}BaseUpdateParam;
-import com.nino.officialsite.module.${module}.param.${classname}BasePageParam;
-import com.nino.officialsite.module.${module}.po.${classname};
-import com.nino.officialsite.module.${module}.service.${classname}BaseService;
+import com.zrzhen.admin.module.${module}.dao.${classname}BaseMapper;
+import com.zrzhen.admin.module.${module}.param.${classname}BaseAddParam;
+import com.zrzhen.admin.module.${module}.param.${classname}BaseUpdateParam;
+import com.zrzhen.admin.module.${module}.param.${classname}BasePageParam;
+import com.zrzhen.admin.module.${module}.po.${classname};
+import com.zrzhen.admin.module.${module}.service.${classname}BaseService;
 import com.nino.chargeserver.result.Page;
 import com.nino.chargeserver.result.PageParam;
 import lombok.extern.slf4j.Slf4j;

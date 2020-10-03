@@ -1,4 +1,4 @@
-package com.nino.officialsite.module.${module}.po;
+package com.zrzhen.admin.module.${module}.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;

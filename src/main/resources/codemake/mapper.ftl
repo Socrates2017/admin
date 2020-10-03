@@ -1,7 +1,7 @@
-package com.nino.officialsite.module.${module}.dao;
+package com.zrzhen.admin.module.${module}.dao;
 
-import com.nino.officialsite.module.${module}.po.${classname};
-import com.nino.officialsite.module.${module}.param.${classname}BasePageParam;
+import com.zrzhen.admin.module.${module}.po.${classname};
+import com.zrzhen.admin.module.${module}.param.${classname}BasePageParam;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 

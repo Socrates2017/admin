@@ -36,7 +36,7 @@ public class CodeGen {
     /**
      * 表名
      */
-    private static final String table = "article";
+    private static final String table = "resource";
 
     /**
      * 忽略的表名前缀
@@ -52,15 +52,15 @@ public class CodeGen {
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
 
     //生成代码所在的基础包名称
-    public static final String BASE_PACKAGE = "com.nino.officialsite.module." + module;
+    public static final String BASE_PACKAGE = "com.zrzhen.admin.module." + module;
     //模板位置
     private static String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/main/resources/codemake";
 
 
     //JDBC配置
-    private static final String JDBC_URL = "jdbc:mysql://192.168.1.7:3306/officialsite?useUnicode=true&useSSL=true&verifyServerCertificate=false&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai";
-    private static final String JDBC_USERNAME = "nino";
-    private static final String JDBC_PASSWORD = "Nino@1234";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/admin?useUnicode=true&useSSL=true&verifyServerCertificate=false&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai";
+    private static final String JDBC_USERNAME = "root";
+    private static final String JDBC_PASSWORD = "rootLC!20190908";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
 

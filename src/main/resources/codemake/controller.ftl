@@ -1,11 +1,11 @@
-package com.nino.officialsite.module.${module}.controller;
+package com.zrzhen.admin.module.${module}.controller;
 
 import com.nino.chargeserver.handler.Log;
-import com.nino.officialsite.module.${module}.param.${classname}BaseAddParam;
-import com.nino.officialsite.module.${module}.param.${classname}BaseUpdateParam;
-import com.nino.officialsite.module.${module}.param.${classname}BasePageParam;
-import com.nino.officialsite.module.${module}.po.${classname};
-import com.nino.officialsite.module.${module}.service.${classname}BaseService;
+import com.zrzhen.admin.module.${module}.param.${classname}BaseAddParam;
+import com.zrzhen.admin.module.${module}.param.${classname}BaseUpdateParam;
+import com.zrzhen.admin.module.${module}.param.${classname}BasePageParam;
+import com.zrzhen.admin.module.${module}.po.${classname};
+import com.zrzhen.admin.module.${module}.service.${classname}BaseService;
 import com.nino.chargeserver.result.Page;
 import com.nino.chargeserver.result.PageParam;
 import com.nino.chargeserver.result.ResponseResult;

@@ -1,4 +1,4 @@
-package com.nino.officialsite.module.${module}.param;
+package com.zrzhen.admin.module.${module}.param;
 
 import lombok.Data;
 

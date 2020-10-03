@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <button class="btn" onclick="btnFun();">点击修改本页历史记录</button>
+</div>
+<br/>
+<div>
+    <a href="b.html">点击跳转到b页面</a>
+</div>
+<script>
+
+        function btnFun() {//点击事件
+history.replaceState('a',null,'a.html?a=1');
+            console.log('修改历史记录后 state的值：',history.state); // a
+};
+    </script>
+</body>
+</html>

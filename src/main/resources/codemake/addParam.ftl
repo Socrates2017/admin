@@ -1,4 +1,4 @@
-package com.nino.officialsite.module.${module}.param;
+package com.zrzhen.admin.module.${module}.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
